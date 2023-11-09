@@ -13,12 +13,12 @@ const DEFAULT_TARGET_LANGUAGE: LanguageCode = "es";
 const Home: FC = () => {
   const [currentJobId, setCurrentJobId] = useLocalStorage(
     CURRENT_JOB_ID_KEY,
-    "",
+    ""
   );
   const [inputUrl, setInputUrl] = useState("");
   const [currentJob, setCurrentJob] = useState<Job | null>(null);
   const [targetLanguage, setTargetLanguage] = useState<LanguageCode>(
-    DEFAULT_TARGET_LANGUAGE,
+    DEFAULT_TARGET_LANGUAGE
   );
 
   useEffect(() => {
@@ -93,6 +93,9 @@ const Home: FC = () => {
       >
         {isJobPending ? "Processing.." : "Translate"}
       </button>
+      <p className="mt-8 text-sm text-gray-500">
+        Note: We shorten all videos to 5 minutes for demonstration purposes.
+      </p>
     </div>
   );
 };
