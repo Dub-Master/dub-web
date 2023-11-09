@@ -94,7 +94,8 @@ const Home: FC = () => {
         {isJobPending ? "Processing.." : "Translate"}
       </button>
       <p className="mt-8 text-sm text-gray-500">
-        Note: We shorten all videos to 5 minutes for demonstration purposes.
+        Note: We shorten all videos longer than 5 minutes for demonstration
+        purposes.
       </p>
     </div>
   );
