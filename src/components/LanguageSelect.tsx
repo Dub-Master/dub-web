@@ -52,7 +52,7 @@ const LanguageSelect: FC<{
                     className={({ active }) =>
                       classNames(
                         active ? "bg-indigo-600 text-white" : "text-gray-500",
-                        "relative cursor-default select-none py-2 pl-3 pr-9"
+                        "relative cursor-default select-none py-2 pl-3 pr-9",
                       )
                     }
                     value={language}
@@ -62,7 +62,7 @@ const LanguageSelect: FC<{
                         <span
                           className={classNames(
                             selected ? "font-semibold" : "font-normal",
-                            "block truncate"
+                            "block truncate",
                           )}
                         >
                           {LanguageName[language]}
@@ -72,7 +72,7 @@ const LanguageSelect: FC<{
                           <span
                             className={classNames(
                               active ? "text-white" : "text-indigo-600",
-                              "absolute inset-y-0 right-0 flex items-center pr-2"
+                              "absolute inset-y-0 right-0 flex items-center pr-2",
                             )}
                           >
                             <CheckIcon className="h-5 w-5" aria-hidden="true" />
