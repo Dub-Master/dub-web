@@ -13,23 +13,27 @@ const DEFAULT_TARGET_LANGUAGE: LanguageCode = "es";
 const Home: FC = () => {
   const [currentJobId, setCurrentJobId] = useLocalStorage(
     CURRENT_JOB_ID_KEY,
-    ""
+    "",
   );
   const [inputUrl, setInputUrl] = useState("");
   const [currentJob, setCurrentJob] = useState<Job | null>(null);
   const [targetLanguage, setTargetLanguage] = useState<LanguageCode>(
-    DEFAULT_TARGET_LANGUAGE
+    DEFAULT_TARGET_LANGUAGE,
   );
 
   useEffect(() => {
-    if (!currentJobId) {
-      return;
-    }
-    const interval = setInterval(async () => {
+    const refreshJob = async () => {
+      if (!currentJobId) {
+        return;
+      }
       const job = await getJob(currentJobId);
       setCurrentJob(job);
-      setInputUrl(job.input_url);
-    }, POLL_INTERVAL_MS);
+      if (job.input_url) {
+        setInputUrl(job.input_url);
+      }
+    };
+    refreshJob();
+    const interval = setInterval(refreshJob, POLL_INTERVAL_MS);
     return () => clearInterval(interval);
   }, [currentJobId]);
 
@@ -93,7 +97,21 @@ const Home: FC = () => {
       >
         {isJobPending ? "Processing.." : "Translate"}
       </button>
-      <p className="mt-8 text-sm text-gray-500">
+
+      {currentJob && currentJob.output_url && (
+        <div className="m-4 text-center">
+          <video src={currentJob.output_url} width="640" height="360" controls>
+            Your browser does not support the video tag.
+          </video>
+          <div className="mt-4">
+            <a href={currentJob.output_url} target="_blank" rel="noreferrer">
+              Download Translated Video &gt;&gt;
+            </a>
+          </div>
+        </div>
+      )}
+
+      <p className="mt-4 text-sm text-gray-500">
         Note: We shorten all videos longer than 5 minutes for demonstration
         purposes.
       </p>
