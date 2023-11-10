@@ -1,10 +1,22 @@
-export type LanguageCode = "en" | "es" | "de" | "fr";
+export type LanguageCode =
+  | "en"
+  | "es"
+  | "de"
+  | "fr"
+  | "pl"
+  | "it"
+  | "pt"
+  | "hi";
 
 export const LanguageName: Record<LanguageCode, string> = {
   en: "English",
   es: "Spanish",
   de: "German",
   fr: "French",
+  pl: "Polish",
+  it: "Italian",
+  pt: "Portuguese",
+  hi: "Hindi",
 };
 
 export type JobStatus = "created" | "running" | "completed" | "failed";

@@ -4,7 +4,16 @@ import { Listbox, Transition } from "@headlessui/react";
 import { CheckIcon, ChevronUpDownIcon } from "@heroicons/react/20/solid";
 import { LanguageCode, LanguageName } from "../types";
 
-const languages: LanguageCode[] = ["es", "en", "fr", "de"];
+const languages: LanguageCode[] = [
+  "es",
+  "en",
+  "fr",
+  "de",
+  "pl",
+  "it",
+  "pt",
+  "hi",
+];
 
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(" ");
@@ -19,8 +28,8 @@ const LanguageSelect: FC<{
       {({ open }) => (
         <>
           <div className="relative mt-2">
-            <Listbox.Button className="relative w-full cursor-default rounded-md bg-white py-1.5 pl-3 pr-10 text-left text-gray-500 shadow-sm ring-1 ring-inset ring-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-600 text-lg">
-              <span className="block truncate">{LanguageName[value]}</span>
+            <Listbox.Button className="relative w-full cursor-default rounded-md bg-white py-1.5 pl-3 pr-12 text-left text-gray-500 shadow-sm ring-1 ring-inset ring-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-600 text-lg">
+              <span className="block truncate w-24">{LanguageName[value]}</span>
               <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
                 <ChevronUpDownIcon
                   className="h-5 w-5 text-gray-400"
@@ -43,7 +52,7 @@ const LanguageSelect: FC<{
                     className={({ active }) =>
                       classNames(
                         active ? "bg-indigo-600 text-white" : "text-gray-500",
-                        "relative cursor-default select-none py-2 pl-3 pr-9",
+                        "relative cursor-default select-none py-2 pl-3 pr-9"
                       )
                     }
                     value={language}
@@ -53,7 +62,7 @@ const LanguageSelect: FC<{
                         <span
                           className={classNames(
                             selected ? "font-semibold" : "font-normal",
-                            "block truncate",
+                            "block truncate"
                           )}
                         >
                           {LanguageName[language]}
@@ -63,7 +72,7 @@ const LanguageSelect: FC<{
                           <span
                             className={classNames(
                               active ? "text-white" : "text-indigo-600",
-                              "absolute inset-y-0 right-0 flex items-center pr-2",
+                              "absolute inset-y-0 right-0 flex items-center pr-2"
                             )}
                           >
                             <CheckIcon className="h-5 w-5" aria-hidden="true" />
