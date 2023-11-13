@@ -1,5 +1,5 @@
+/* eslint-env node */
 /** @type {import('tailwindcss').Config} */
-const defaultTheme = require("tailwindcss/defaultTheme");
 
 module.exports = {
   darkMode: ["class"],
@@ -21,7 +21,6 @@ module.exports = {
     extend: {
       fontFamily: {
         sans: ["Gilroy", "Helvetica", "Arial", "sans-serif"],
-        // gilroy: ["Gilroy", ...defaultTheme.fontFamily.sans],
       },
       colors: {
         border: "hsl(var(--border))",
