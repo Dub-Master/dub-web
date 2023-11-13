@@ -1,5 +1,6 @@
 import React, { FC } from "react";
-import Home from "./components/Home";
+// import Home from "./components/Home";
+import MainContent from "./components/MainContent";
 import "./App.css";
 
 const App: FC = () => {
@@ -9,7 +10,8 @@ const App: FC = () => {
         <a href="#">Help</a>
       </div>
       <div className="flex flex-1">
-        <Home />
+        {/* <Home /> */}
+        <MainContent />
       </div>
     </div>
   );
