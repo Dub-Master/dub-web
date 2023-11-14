@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useState } from "react";
 import ComboBox from "./ComboBox";
 import { Input } from "./ui/input";
-
+import { Link } from "react-router-dom";
 import videoPlaceholderImg from "../assets/video-placeholder.png";
 import { useLocalStorage } from "../hooks/useLocalStorage";
 import { LanguageCode, Job, isJobStatusFinal } from "../types";
@@ -16,6 +16,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "./ui/dialog";
+import { buttonVariants } from "./ui/button";
 
 import CircularProgress from "@mui/joy/CircularProgress";
 const POLL_INTERVAL_MS = 10000;
@@ -57,6 +58,10 @@ const languageOptions = [
   },
 ];
 
+function classNames(...classes: string[]) {
+  return classes.filter(Boolean).join(" ");
+}
+
 const VideoTranslationComponent = () => {
   const [currentJobId, setCurrentJobId] = useLocalStorage(
     CURRENT_JOB_ID_KEY,
@@ -70,11 +75,13 @@ const VideoTranslationComponent = () => {
   );
 
   const checkStatus = async (currentJobId: string) => {
-    if (currentJob && currentJob.status !== "completed") {
+    if (
+      currentJobId &&
+      (currentJob === null || currentJob.status !== "completed")
+    ) {
       const job = await getJob(currentJobId);
       setCurrentJob(job);
       setInputUrl(job.input_url);
-      console.log(job);
       if (job.status !== "completed") {
         setOpen(true);
       }
@@ -150,7 +157,7 @@ const VideoTranslationComponent = () => {
               </DialogFooter>
             </>
           )}
-          {currentJob && currentJob.status === "running" && (
+          {currentJob && ["running", "created"].includes(currentJob.status) && (
             <>
               <DialogHeader>
                 <DialogTitle>
@@ -253,6 +260,55 @@ const VideoTranslationComponent = () => {
             /> */}
             </div>
 
+            {currentJob && currentJob.output_url && (
+              <div className="m-4 text-center">
+                <video
+                  src={currentJob.output_url}
+                  width="640"
+                  height="360"
+                  controls
+                >
+                  Your browser does not support the video tag.
+                </video>
+                <div className="flex flex-col items-center mt-3 w-[240px] lg:w-[480px] xl:w-[640px]">
+                  <Link
+                    className={classNames(
+                      "lg:mt-1 px-4 py-3 border border-transparent text-base font-medium rounded-md text-white bg-[#5061FF] hover:bg-[#3748DE] focus:ring-gray-600 flex items-center"
+                      // buttonVariants({ variant: "outline" })
+                    )}
+                    to={currentJob.output_url}
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    {/* <Button
+                    type="button"
+                    className="mt-0 lg:mt-1 px-8 py-3 border border-transparent text-base font-medium rounded-md text-white bg-[#5061FF] hover:bg-[#3748DE] focus:ring-gray-600 flex items-center"
+                    
+                  > */}
+                    <svg
+                      width="25"
+                      height="24"
+                      viewBox="0 0 25 24"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="mr-2"
+                    >
+                      <path
+                        d="M23 18V21C23 21.8273 22.3272 22.5 21.5 22.5H3.5C2.67275 22.5 2 21.8273 2 21V18C2 17.586 2.336 17.25 2.75 17.25C3.164 17.25 3.5 17.586 3.5 18V21H21.5V18C21.5 17.586 21.836 17.25 22.25 17.25C22.664 17.25 23 17.586 23 18Z"
+                        fill="white"
+                      />
+                      <path
+                        d="M6.71994 12.5303C6.42669 12.237 6.42669 11.763 6.71994 11.4698C7.01319 11.1765 7.48719 11.1765 7.78044 11.4698L11.7502 15.4395V2.25C11.7502 1.836 12.0862 1.5 12.5002 1.5C12.9142 1.5 13.2502 1.836 13.2502 2.25V15.4395L17.2199 11.4698C17.5132 11.1765 17.9872 11.1765 18.2804 11.4698C18.5737 11.763 18.5737 12.237 18.2804 12.5303L13.0304 17.7803C12.7334 18.078 12.2572 18.0683 11.9692 17.7803L6.71994 12.5303Z"
+                        fill="white"
+                      />
+                    </svg>
+
+                    <span>Download Dubbed Video</span>
+                  </Link>
+                </div>
+              </div>
+            )}
+
             {youtubeUrl ? (
               <div className="mt-4 ">
                 <span className="self-start mt-1 lg:mt-4 text-sm font-bold">
@@ -276,57 +332,61 @@ const VideoTranslationComponent = () => {
               </div>
             )}
             {/* <div className="relative w-full mt-4"> */}
-            <div className="flex flex-col items-center mb-4 w-[240px] lg:w-[480px] xl:w-[640px]">
-              {/* <button className="absolute inset-y-0 left-0 flex items-center pl-3">
+            {(currentJob === null || currentJob.status !== "completed") && (
+              <>
+                <div className="flex flex-col items-center mb-4 w-[240px] lg:w-[480px] xl:w-[640px]">
+                  {/* <button className="absolute inset-y-0 left-0 flex items-center pl-3">
               {/* Icon can be placed here */}
-              {/* </button> */}
-              {/* <div className="flex"> */}
-              <span className="self-start mt-1 lg:mt-2 mb-2 text-sm">
-                Target Language
-              </span>
-              {/* <div className="self-start"> */}
-              <ComboBox
-                languageOptions={languageOptions}
-                value={targetLanguage}
-                setValue={setTargetLanguage}
-              />
-              {/* </div> */}
-              {/* <select className="block w-full pl-10 pr-10 border-gray-300 rounded-md shadow-sm focus:border-sky-500 focus:ring-sky-500 sm:text-sm">
+                  {/* </button> */}
+                  {/* <div className="flex"> */}
+                  <span className="self-start mt-1 lg:mt-2 mb-2 text-sm">
+                    Target Language
+                  </span>
+                  {/* <div className="self-start"> */}
+                  <ComboBox
+                    languageOptions={languageOptions}
+                    value={targetLanguage}
+                    setValue={setTargetLanguage}
+                  />
+                  {/* </div> */}
+                  {/* <select className="block w-full pl-10 pr-10 border-gray-300 rounded-md shadow-sm focus:border-sky-500 focus:ring-sky-500 sm:text-sm">
               <option>English</option>
               {/* Add other language options here */}
-              {/* </select>  */}
-            </div>
-            <p className="mt-1 mb-8 items-center text-sm text-gray-500">
-              Note: We shorten all videos longer than 5 minutes for
-              demonstration purposes.
-            </p>
-            {/* <DialogTrigger asChild> */}
-            <button
-              type="button"
-              className="mt-0 lg:mt-1 px-8 py-3 border border-transparent text-base font-medium rounded-md text-white bg-[#5061FF] hover:bg-[#3748DE] focus:ring-gray-600 flex items-center"
-              onClick={handleCreateJob}
-              disabled={!!isJobPending}
-            >
-              <svg
-                width="21"
-                height="21"
-                viewBox="0 0 21 21"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-                className="mr-2"
-              >
-                <path
-                  fillRule="evenodd"
-                  clipRule="evenodd"
-                  d="M20.94 1.48699C21.2339 0.604928 20.3949 -0.234267 19.5128 0.0597136L0.771531 6.30688C-0.280916 6.65766 -0.248291 8.15745 0.818325 8.46214L9.93326 11.0665L12.5375 20.1815C12.8423 21.2482 14.342 21.2808 14.6928 20.2283L20.94 1.48699ZM19.4707 2.32702L13.6225 19.8715L11.0232 10.7743L19.4707 2.32702ZM18.6728 1.52914L10.2255 9.97646L1.12838 7.37731L18.6728 1.52914Z"
-                  fill="white"
-                />
-              </svg>
-              <span>Translate</span>
-            </button>
+                  {/* </select>  */}
+                </div>
+                <p className="mt-1 mb-8 items-center text-sm text-gray-500">
+                  Note: We shorten all videos longer than 5 minutes for
+                  demonstration purposes.
+                </p>
+                {/* <DialogTrigger asChild> */}
+                <button
+                  type="button"
+                  className="mt-0 lg:mt-1 px-8 py-3 border border-transparent text-base font-medium rounded-md text-white bg-[#5061FF] hover:bg-[#3748DE] focus:ring-gray-600 flex items-center"
+                  onClick={handleCreateJob}
+                  disabled={!!isJobPending}
+                >
+                  <svg
+                    width="21"
+                    height="21"
+                    viewBox="0 0 21 21"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="mr-2"
+                  >
+                    <path
+                      fillRule="evenodd"
+                      clipRule="evenodd"
+                      d="M20.94 1.48699C21.2339 0.604928 20.3949 -0.234267 19.5128 0.0597136L0.771531 6.30688C-0.280916 6.65766 -0.248291 8.15745 0.818325 8.46214L9.93326 11.0665L12.5375 20.1815C12.8423 21.2482 14.342 21.2808 14.6928 20.2283L20.94 1.48699ZM19.4707 2.32702L13.6225 19.8715L11.0232 10.7743L19.4707 2.32702ZM18.6728 1.52914L10.2255 9.97646L1.12838 7.37731L18.6728 1.52914Z"
+                      fill="white"
+                    />
+                  </svg>
+                  <span>Translate</span>
+                </button>
 
-            {/* <Button variant="outline">Edit Profile</Button> */}
-            {/* </DialogTrigger> */}
+                {/* <Button variant="outline">Edit Profile</Button> */}
+                {/* </DialogTrigger> */}
+              </>
+            )}
           </div>
         </div>
       </Dialog>

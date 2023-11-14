@@ -29,13 +29,13 @@ export default function Header() {
             </div>
             <div className="flex items-center">
               <div className="flex-shrink-0">
-                <button
+                {/* <button
                   type="button"
                   className="relative inline-flex items-center rounded-md border border-transparent bg-[#5061FF] px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-[#3748DE] focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
                 >
                   <PlusIcon className="-ml-1 mr-2 h-5 w-5" aria-hidden="true" />
                   <span>New Dub</span>
-                </button>
+                </button> */}
               </div>
               <div className="hidden md:ml-4 md:flex md:flex-shrink-0 md:items-center">
                 {/* Profile dropdown */}
