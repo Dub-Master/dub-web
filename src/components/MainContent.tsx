@@ -7,7 +7,7 @@ const MainContent = () => {
   return (
     <div>
       <Header />
-      <main className="flex flex-col items-center justify-center py-8">
+      <main className="bg-[#f5f9ff] flex flex-col items-center justify-center py-8">
         <VideoTranslationComponent />
         {/* <div className="text-center">
           <h1 className="text-xl font-semibold mb-4">Video Translation</h1>

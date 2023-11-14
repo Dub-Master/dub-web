@@ -1,6 +1,16 @@
-import React from "react";
+import React, { FC, useEffect, useMemo, useState } from "react";
 import ComboBox from "./ComboBox";
 import { Input } from "./ui/input";
+
+import videoPlaceholderImg from "../assets/video-placeholder.png";
+import { useLocalStorage } from "../hooks/useLocalStorage";
+import { LanguageCode, Job, isJobStatusFinal } from "../types";
+import { parseYoutubeUrl, createYoutubeUrl } from "../utils";
+import { createJob, getJob } from "../api";
+
+const POLL_INTERVAL_MS = 10000;
+const CURRENT_JOB_ID_KEY = "currentJobId";
+const DEFAULT_TARGET_LANGUAGE: LanguageCode = "es";
 
 const languageOptions = [
   {
@@ -37,24 +47,62 @@ const languageOptions = [
   },
 ];
 
-// en: "English",
-// es: "Spanish",
-// de: "German",
-// fr: "French",
-// pl: "Polish",
-// it: "Italian",
-// pt: "Portuguese",
-// hi: "Hindi",
-
 const VideoTranslationComponent = () => {
+  const [currentJobId, setCurrentJobId] = useLocalStorage(
+    CURRENT_JOB_ID_KEY,
+    ""
+  );
+  const [inputUrl, setInputUrl] = useState("");
+  const [currentJob, setCurrentJob] = useState<Job | null>(null);
+  const [targetLanguage, setTargetLanguage] = useState<LanguageCode>(
+    DEFAULT_TARGET_LANGUAGE
+  );
+
+  useEffect(() => {
+    if (!currentJobId) {
+      return;
+    }
+    const interval = setInterval(async () => {
+      const job = await getJob(currentJobId);
+      setCurrentJob(job);
+      setInputUrl(job.input_url);
+    }, POLL_INTERVAL_MS);
+    return () => clearInterval(interval);
+  }, [currentJobId]);
+
+  const youtubeId = useMemo(() => {
+    return parseYoutubeUrl(inputUrl);
+  }, [inputUrl]);
+
+  const youtubeUrl = useMemo(() => {
+    if (!youtubeId) {
+      return "";
+    }
+    return createYoutubeUrl(youtubeId);
+  }, [youtubeId]);
+
+  const handleCreateJob = async () => {
+    const inputJob: Job = {
+      id: "",
+      input_url: inputUrl,
+      target_language: targetLanguage,
+      output_url: "",
+      status: "created",
+    };
+    const id = await createJob(inputJob);
+    setCurrentJobId(id);
+  };
+
+  const isJobPending = currentJob && !isJobStatusFinal(currentJob.status);
+
   return (
-    <div className="p-8">
-      <div className="mx-auto max-w-7xl py-4 px-4 sm:py-12 sm:px-6 lg:px-8">
+    <>
+      <div className="mx-auto max-w-7xl px-4 sm:py-4 sm:px-6 lg:px-8">
         <div className="text-center">
-          <h2 className="mt-1 text-2xl font-semibold tracking-tight sm:text-3xl lg:text-4xl text-[#222222]">
+          <h2 className="mt-0 lg:mt-1 text-2xl font-semibold tracking-tight sm:text-3xl lg:text-4xl text-[#222222]">
             Video Translation
           </h2>
-          <p className="mx-auto font-normal mt-5 max-w-xl text-base text-[#222222]">
+          <p className="w-[240px] lg:w-[480px] xl:w-[640px] mx-auto font-normal mt-3 lg:mt-5 max-w-xl text-base text-[#222222]">
             Effortlessly convert your videos with a single click, utilizing a
             realistic voice clone that replicates an authentic speaking manner!
           </p>
@@ -63,7 +111,7 @@ const VideoTranslationComponent = () => {
 
       <div className="max-w-4xl mx-auto">
         <div className="flex flex-col items-center mb-4">
-          <div className="flex items-center border border-gray-300 rounded-md shadow-sm">
+          <div className="flex items-center border border-gray-300 rounded-md shadow-sm w-[240px] lg:w-[480px] xl:w-[640px] mt-4 lg:mt-0">
             <div className="p-2">
               <svg
                 width="24"
@@ -90,10 +138,15 @@ const VideoTranslationComponent = () => {
               </svg>
             </div>
             <Input
-              type="email"
-              placeholder="Paste Youtube video link here..."
+              type="text"
+              name="videoUrl"
+              placeholder="Paste YouTube link"
               className="focus:outline-none focus:ring-0 w-full"
+              value={inputUrl}
+              onChange={(e) => setInputUrl(e.target.value)}
+              disabled={!!isJobPending}
             />
+
             {/* <input
               type="text"
               placeholder="Paste Youtube video link here..."
@@ -101,22 +154,53 @@ const VideoTranslationComponent = () => {
                           focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500"
             /> */}
           </div>
+          {youtubeUrl ? (
+            <div className="m-4">
+              <iframe
+                className="rounded-md w-[240px] h-[180px] lg:w-[480px] lg:h-[360px] xl:w-[640px]"
+                src={youtubeUrl}
+              ></iframe>
+            </div>
+          ) : (
+            <div className="m-4">
+              <img
+                src={videoPlaceholderImg}
+                alt="Youtube Video"
+                className="rounded-md w-[240px] h-[180px] lg:w-[480px] lg:h-[360px] xl:w-[640px]"
+              />
+            </div>
+          )}
           {/* <div className="relative w-full mt-4"> */}
-          <div className="flex flex-col items-center mb-4">
-            <button className="absolute inset-y-0 left-0 flex items-center pl-3">
+          <div className="flex flex-col items-center mb-4 w-[240px] lg:w-[480px] xl:w-[640px]">
+            {/* <button className="absolute inset-y-0 left-0 flex items-center pl-3">
               {/* Icon can be placed here */}
-            </button>
-            <ComboBox languageOptions={languageOptions} />
+            {/* </button> */}
+            {/* <div className="flex"> */}
+            <span className="self-start mt-1 lg:mt-2 mb-2 text-sm">
+              Target Language
+            </span>
+            {/* <div className="self-start"> */}
+            <ComboBox
+              languageOptions={languageOptions}
+              value={targetLanguage}
+              setValue={setTargetLanguage}
+            />
+            {/* </div> */}
             {/* <select className="block w-full pl-10 pr-10 border-gray-300 rounded-md shadow-sm focus:border-sky-500 focus:ring-sky-500 sm:text-sm">
               <option>English</option>
               {/* Add other language options here */}
             {/* </select>  */}
           </div>
-          <p className="mt-8 text-sm text-gray-500">
+          <p className="mt-1 mb-8 items-center w-[240px] lg:w-[480px] xl:w-[640px] text-sm text-gray-500">
             Note: We shorten all videos longer than 5 minutes for demonstration
             purposes.
           </p>
-          <button className="mt-4 px-6 py-2 border border-transparent text-base font-medium rounded-md text-white bg-[#5061FF] hover:bg-blue-700 flex">
+          <button
+            type="button"
+            className="mt-0 lg:mt-1 px-6 py-2 border border-transparent text-base font-medium rounded-md text-white bg-[#5061FF] hover:bg-[#3748DE] focus:ring-gray-600 flex"
+            onClick={handleCreateJob}
+            disabled={!!isJobPending}
+          >
             <svg
               width="21"
               height="21"
@@ -134,13 +218,8 @@ const VideoTranslationComponent = () => {
             <span className="ml-2">Translate</span>
           </button>
         </div>
-        {/* Footer Links */}
-        <div className="flex justify-between items-center mt-8">
-          <div>{/* Company Links */}</div>
-          <div>{/* Social Links */}</div>
-        </div>
       </div>
-    </div>
+    </>
   );
 };
 

@@ -5,7 +5,7 @@ import "./App.css";
 
 const App: FC = () => {
   return (
-    <div className="w-screen h-screen flex flex-col bg-[#f5f9ff]">
+    <div className="w-screen h-screen flex flex-col">
       {/* <Home /> */}
       <MainContent />
     </div>

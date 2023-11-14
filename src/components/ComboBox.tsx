@@ -1,8 +1,8 @@
 "use client";
 
 import * as React from "react";
-import { Check, ChevronsUpDown } from "lucide-react";
-
+import { Check, ChevronDown, ChevronUp } from "lucide-react";
+import { LanguageCode } from "../types";
 import { cn } from "../lib/utils";
 import { Button } from "./ui/button";
 import {
@@ -21,11 +21,14 @@ type ComboOption = {
 
 export default function Combobox({
   languageOptions,
+  value,
+  setValue,
 }: {
   languageOptions: ComboOption[];
+  value: LanguageCode;
+  setValue: (language: LanguageCode) => void;
 }) {
   const [open, setOpen] = React.useState(false);
-  const [value, setValue] = React.useState("");
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
@@ -34,16 +37,16 @@ export default function Combobox({
           variant="outline"
           role="combobox"
           aria-expanded={open}
-          className="w-[240px] justify-between"
+          className="w-[240px] lg:w-[480px] xl:w-[640px] justify-between"
         >
           {value
             ? languageOptions.find((framework) => framework.value === value)
                 ?.label
             : "Select a target language"}
-          <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+          <ChevronDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-[200px] p-0">
+      <PopoverContent className="w-4/5 lg:w-[480px] p-0">
         <Command>
           <CommandInput placeholder="Search language..." />
           <CommandEmpty>No language found.</CommandEmpty>
@@ -53,7 +56,11 @@ export default function Combobox({
                 key={language.value}
                 value={language.value}
                 onSelect={(currentValue) => {
-                  setValue(currentValue === value ? "" : currentValue);
+                  setValue(
+                    (currentValue === value
+                      ? "es"
+                      : currentValue) as LanguageCode
+                  );
                   setOpen(false);
                 }}
               >
