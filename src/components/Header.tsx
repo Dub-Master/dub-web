@@ -3,7 +3,6 @@ import React from "react";
 import { Fragment } from "react";
 import { Disclosure, Menu, Transition } from "@headlessui/react";
 import { BellIcon } from "@heroicons/react/24/outline";
-import { PlusIcon } from "@heroicons/react/20/solid";
 import Logo from "./Logo";
 
 function classNames(...classes: string[]) {

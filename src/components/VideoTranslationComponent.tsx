@@ -16,7 +16,6 @@ import {
   DialogHeader,
   DialogTitle,
 } from "./ui/dialog";
-import { buttonVariants } from "./ui/button";
 
 import CircularProgress from "@mui/joy/CircularProgress";
 const POLL_INTERVAL_MS = 10000;
@@ -274,7 +273,6 @@ const VideoTranslationComponent = () => {
                   <Link
                     className={classNames(
                       "lg:mt-1 px-4 py-3 border border-transparent text-base font-medium rounded-md text-white bg-[#5061FF] hover:bg-[#3748DE] focus:ring-gray-600 flex items-center"
-                      // buttonVariants({ variant: "outline" })
                     )}
                     to={currentJob.output_url}
                     target="_blank"
@@ -367,7 +365,7 @@ const VideoTranslationComponent = () => {
               {/* Add other language options here */}
                   {/* </select>  */}
                 </div>
-                <p className="mt-1 mb-8 items-center text-sm text-gray-500">
+                <p className="mt-1 mb-8 w-[240px] lg:w-[480px] xl:w-[640px] items-center text-sm text-gray-500">
                   Note: We shorten all videos longer than 5 minutes for
                   demonstration purposes.
                 </p>

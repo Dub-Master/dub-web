@@ -43,10 +43,14 @@ export default function Combobox({
             ? languageOptions.find((framework) => framework.value === value)
                 ?.label
             : "Select a target language"}
-          <ChevronDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+          {open ? (
+            <ChevronDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+          ) : (
+            <ChevronUp className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+          )}
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-4/5 lg:w-[480px] p-0">
+      <PopoverContent className="w-[240px] lg:w-[480px] xl:w-[640px] p-0">
         <Command>
           <CommandInput placeholder="Search language..." />
           <CommandEmpty>No language found.</CommandEmpty>
