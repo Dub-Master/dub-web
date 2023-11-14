@@ -332,6 +332,19 @@ const VideoTranslationComponent = () => {
               </div>
             )}
             {/* <div className="relative w-full mt-4"> */}
+            {currentJob && currentJob.output_url && (
+              <button
+                type="button"
+                className="mt-0 lg:mt-3 px-8 py-3 border border-transparent text-base font-medium rounded-md text-white bg-[#5061FF] hover:bg-[#3748DE] focus:ring-gray-600 flex items-center"
+                onClick={() => {
+                  setCurrentJobId("");
+                  setCurrentJob(null);
+                  setInputUrl("");
+                }}
+              >
+                <span>Create a New Dub</span>
+              </button>
+            )}
             {(currentJob === null || currentJob.status !== "completed") && (
               <>
                 <div className="flex flex-col items-center mb-4 w-[240px] lg:w-[480px] xl:w-[640px]">
