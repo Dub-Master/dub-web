@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import ComboBox from "./ComboBox";
 import { Input } from "./ui/input";
 
@@ -7,7 +7,7 @@ import { useLocalStorage } from "../hooks/useLocalStorage";
 import { LanguageCode, Job, isJobStatusFinal } from "../types";
 import { parseYoutubeUrl, createYoutubeUrl } from "../utils";
 import { createJob, getJob } from "../api";
-
+import { LoadingModal } from "./LoadingModal";
 const POLL_INTERVAL_MS = 10000;
 const CURRENT_JOB_ID_KEY = "currentJobId";
 const DEFAULT_TARGET_LANGUAGE: LanguageCode = "es";
@@ -98,6 +98,7 @@ const VideoTranslationComponent = () => {
   return (
     <>
       <div className="mx-auto max-w-7xl px-4 sm:py-4 sm:px-6 lg:px-8">
+        <LoadingModal />
         <div className="text-center">
           <h2 className="mt-0 lg:mt-1 text-2xl font-semibold tracking-tight sm:text-3xl lg:text-4xl text-[#222222]">
             Video Translation
@@ -154,19 +155,23 @@ const VideoTranslationComponent = () => {
                           focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500"
             /> */}
           </div>
+
           {youtubeUrl ? (
-            <div className="m-4">
-              <iframe
-                className="rounded-md w-[240px] h-[180px] lg:w-[480px] lg:h-[360px] xl:w-[640px]"
-                src={youtubeUrl}
-              ></iframe>
+            <div className="m-4 w-[240px] h-[180px] lg:w-[480px] lg:h-[360px] xl:w-[640px]">
+              <span className="self-start mt-1 lg:mt-2 mb-2 text-sm font-bold">
+                Video to Dub
+              </span>
+              <iframe className="rounded-md " src={youtubeUrl}></iframe>
             </div>
           ) : (
-            <div className="m-4">
+            <div className="m-4 w-[240px] h-[180px] lg:w-[480px] lg:h-[360px] xl:w-[640px]">
+              <span className="self-start mt-1 lg:mt-2 mb-2 text-sm">
+                Video to Dub
+              </span>
               <img
                 src={videoPlaceholderImg}
                 alt="Youtube Video"
-                className="rounded-md w-[240px] h-[180px] lg:w-[480px] lg:h-[360px] xl:w-[640px]"
+                className="rounded-md"
               />
             </div>
           )}
@@ -191,13 +196,13 @@ const VideoTranslationComponent = () => {
               {/* Add other language options here */}
             {/* </select>  */}
           </div>
-          <p className="mt-1 mb-8 items-center w-[240px] lg:w-[480px] xl:w-[640px] text-sm text-gray-500">
+          <p className="mt-1 mb-8 items-center text-sm text-gray-500">
             Note: We shorten all videos longer than 5 minutes for demonstration
             purposes.
           </p>
           <button
             type="button"
-            className="mt-0 lg:mt-1 px-6 py-2 border border-transparent text-base font-medium rounded-md text-white bg-[#5061FF] hover:bg-[#3748DE] focus:ring-gray-600 flex"
+            className="mt-0 lg:mt-1 px-8 py-3 border border-transparent text-base font-medium rounded-md text-white bg-[#5061FF] hover:bg-[#3748DE] focus:ring-gray-600 flex items-center"
             onClick={handleCreateJob}
             disabled={!!isJobPending}
           >
@@ -207,6 +212,7 @@ const VideoTranslationComponent = () => {
               viewBox="0 0 21 21"
               fill="none"
               xmlns="http://www.w3.org/2000/svg"
+              className="mr-2"
             >
               <path
                 fillRule="evenodd"
@@ -215,7 +221,7 @@ const VideoTranslationComponent = () => {
                 fill="white"
               />
             </svg>
-            <span className="ml-2">Translate</span>
+            <span>Translate</span>
           </button>
         </div>
       </div>
