@@ -15,10 +15,8 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from "./ui/dialog";
 
-import { Label } from "./ui/label";
 import CircularProgress from "@mui/joy/CircularProgress";
 const POLL_INTERVAL_MS = 10000;
 const CURRENT_JOB_ID_KEY = "currentJobId";
@@ -72,12 +70,14 @@ const VideoTranslationComponent = () => {
   );
 
   const checkStatus = async (currentJobId: string) => {
-    const job = await getJob(currentJobId);
-    setCurrentJob(job);
-    setInputUrl(job.input_url);
-    console.log(job);
-    if (job.status !== "completed") {
-      setOpen(true);
+    if (currentJob && currentJob.status !== "completed") {
+      const job = await getJob(currentJobId);
+      setCurrentJob(job);
+      setInputUrl(job.input_url);
+      console.log(job);
+      if (job.status !== "completed") {
+        setOpen(true);
+      }
     }
   };
 
@@ -141,13 +141,34 @@ const VideoTranslationComponent = () => {
                 <Button
                   type="submit"
                   className="mt-2 text-white bg-[#5061FF] hover:bg-[#3748DE] focus:ring-gray-600"
+                  onClick={() => {
+                    setOpen(false);
+                  }}
                 >
-                  Download Video
+                  Show me!
                 </Button>
               </DialogFooter>
             </>
           )}
-
+          {currentJob && currentJob.status === "running" && (
+            <>
+              <DialogHeader>
+                <DialogTitle>
+                  Your video is being translated and dubbed!
+                </DialogTitle>
+              </DialogHeader>
+              <DialogDescription>Please check back later.</DialogDescription>
+              <CircularProgress variant="soft" />
+              <DialogFooter>
+                {/* <Button
+                  type="submit"
+                  className="mt-2 text-white bg-[#5061FF] hover:bg-[#3748DE] focus:ring-gray-600"
+                >
+                  Cancel Job
+                </Button> */}
+              </DialogFooter>
+            </>
+          )}
           {currentJob && currentJob.status === "failed" && (
             <>
               <DialogHeader>
