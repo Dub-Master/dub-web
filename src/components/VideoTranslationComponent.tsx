@@ -74,16 +74,19 @@ const VideoTranslationComponent = () => {
   );
 
   const checkStatus = async (currentJobId: string) => {
-    if (
-      currentJobId &&
-      (currentJob === null || currentJob.status !== "completed")
-    ) {
-      const job = await getJob(currentJobId);
-      setCurrentJob(job);
-      setInputUrl(job.input_url);
-      if (job.status !== "completed") {
-        setOpen(true);
-      }
+    if (currentJob && currentJob.status === "completed") {
+      return;
+    }
+
+    const job = await getJob(currentJobId);
+    console.log({ status: job.status });
+    if (currentJob) {
+      console.log({ status_currentJob: currentJob.status });
+    }
+    setCurrentJob(job);
+    setInputUrl(job.input_url);
+    if (job.status !== "completed") {
+      setOpen(true);
     }
   };
 
@@ -205,7 +208,7 @@ const VideoTranslationComponent = () => {
             <h2 className="mt-0 lg:mt-1 text-2xl font-semibold tracking-tight sm:text-3xl lg:text-4xl text-[#222222]">
               Video Translation
             </h2>
-            <p className="w-[240px] lg:w-[480px] xl:w-[640px] mx-auto font-normal mt-3 lg:mt-5 max-w-xl text-base text-[#222222]">
+            <p className="w-[360px] lg:w-[480px] xl:w-[640px] mx-auto font-normal mt-3 lg:mt-5 max-w-xl text-base text-[#222222]">
               Effortlessly convert your videos with a single click, utilizing a
               realistic voice clone that replicates an authentic speaking
               manner!
@@ -215,7 +218,7 @@ const VideoTranslationComponent = () => {
 
         <div className="max-w-4xl mx-auto">
           <div className="flex flex-col items-center mb-4">
-            <div className="flex items-center border border-gray-300 rounded-md shadow-sm w-[240px] lg:w-[480px] xl:w-[640px] mt-4 lg:mt-0">
+            <div className="flex items-center border border-gray-300 rounded-md shadow-sm w-[360px] lg:w-[480px] xl:w-[640px] mt-4 lg:mt-0">
               <div className="p-2">
                 <svg
                   width="24"
@@ -260,16 +263,17 @@ const VideoTranslationComponent = () => {
             </div>
 
             {currentJob && currentJob.output_url && (
-              <div className="m-4 text-center">
+              <div className="m-4 text-center items-center flex flex-col">
                 <video
                   src={currentJob.output_url}
-                  width="640"
-                  height="360"
+                  // width="640"
+                  // height="360"
+                  className="w-[360px] lg:w-[480px] xl:w-[640px]"
                   controls
                 >
                   Your browser does not support the video tag.
                 </video>
-                <div className="flex flex-col items-center mt-3 w-[240px] lg:w-[480px] xl:w-[640px]">
+                <div className="flex flex-col items-center mt-3 w-[360px] lg:w-[480px] xl:w-[640px]">
                   <Link
                     className={classNames(
                       "lg:mt-1 px-4 py-3 border border-transparent text-base font-medium rounded-md text-white bg-[#5061FF] hover:bg-[#3748DE] focus:ring-gray-600 flex items-center"
@@ -310,17 +314,21 @@ const VideoTranslationComponent = () => {
             {youtubeUrl ? (
               <div className="mt-4 ">
                 <span className="self-start mt-1 lg:mt-4 text-sm font-bold">
-                  Video to Dub
+                  {currentJob && currentJob.output_url
+                    ? "Original Video"
+                    : "Video to Dub"}
                 </span>
                 <iframe
-                  className="rounded-md w-[240px] h-[180px] lg:w-[480px] lg:h-[360px] xl:w-[640px]"
+                  className="rounded-md w-[360px] h-[180px] lg:w-[480px] lg:h-[360px] xl:w-[640px]"
                   src={youtubeUrl}
                 ></iframe>
               </div>
             ) : (
-              <div className="mt-4 w-[240px] h-[180px] lg:w-[480px] lg:h-[360px] xl:w-[640px]">
+              <div className="mt-4 w-[360px] h-[180px] lg:w-[480px] lg:h-[360px] xl:w-[640px]">
                 <span className="self-start mt-1 lg:mt-4 text-sm">
-                  Video to Dub
+                  {currentJob && currentJob.output_url
+                    ? "Original Video"
+                    : "Video to Dub"}
                 </span>
                 <img
                   src={videoPlaceholderImg}
@@ -333,7 +341,8 @@ const VideoTranslationComponent = () => {
             {currentJob && currentJob.output_url && (
               <button
                 type="button"
-                className="mt-0 lg:mt-3 px-8 py-3 border border-transparent text-base font-medium rounded-md text-white bg-[#5061FF] hover:bg-[#3748DE] focus:ring-gray-600 flex items-center"
+                // className="mt-2 lg:mt-3 px-8 py-3 border border-transparent text-base font-medium rounded-md text-white bg-[#5062ffa9] hover:bg-[#3748DE] focus:ring-gray-600 flex items-center"
+                className="mt-2 lg:mt-3 px-8 py-3 inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-base font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
                 onClick={() => {
                   setCurrentJobId("");
                   setCurrentJob(null);
@@ -345,7 +354,7 @@ const VideoTranslationComponent = () => {
             )}
             {(currentJob === null || currentJob.status !== "completed") && (
               <>
-                <div className="flex flex-col items-center mb-4 w-[240px] lg:w-[480px] xl:w-[640px]">
+                <div className="flex flex-col items-center mb-4 w-[360px] lg:w-[480px] xl:w-[640px]">
                   {/* <button className="absolute inset-y-0 left-0 flex items-center pl-3">
               {/* Icon can be placed here */}
                   {/* </button> */}
@@ -365,7 +374,7 @@ const VideoTranslationComponent = () => {
               {/* Add other language options here */}
                   {/* </select>  */}
                 </div>
-                <p className="mt-1 mb-8 w-[240px] lg:w-[480px] xl:w-[640px] items-center text-sm text-gray-500">
+                <p className="mt-1 mb-8 w-[360px] lg:w-[480px] xl:w-[640px] items-center text-sm text-gray-500">
                   Note: We shorten all videos longer than 5 minutes for
                   demonstration purposes.
                 </p>
