@@ -104,7 +104,7 @@ export default function Footer() {
           </div>
         </div>
         <div className="mt-12 border-t border-gray-200 pt-8">
-          <p className="text-base text-gray-400 xl:text-center">
+          <p className=" text-sm text-gray-400 xl:text-right">
             &copy; {new Date().getFullYear()} DubMaster - All rights reserved.
           </p>
         </div>

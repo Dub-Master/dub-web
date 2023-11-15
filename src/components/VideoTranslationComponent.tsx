@@ -131,7 +131,7 @@ const VideoTranslationComponent = () => {
     <>
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent
-          className="sm:max-w-[425px] flex flex-col justify-center items-center"
+          className="sm:max-w-[425px] lg:h-[325px] flex flex-col justify-center items-center"
           onPointerDownOutside={(e) => {
             e.preventDefault();
           }}
@@ -166,7 +166,9 @@ const VideoTranslationComponent = () => {
                   Your video is being translated and dubbed!
                 </DialogTitle>
               </DialogHeader>
-              <DialogDescription>Please check back later.</DialogDescription>
+              <DialogDescription>
+                You can close this tab and check back later.
+              </DialogDescription>
               <CircularProgress variant="soft" />
               <DialogFooter>
                 {/* <Button
@@ -341,15 +343,42 @@ const VideoTranslationComponent = () => {
             {currentJob && currentJob.output_url && (
               <button
                 type="button"
-                // className="mt-2 lg:mt-3 px-8 py-3 border border-transparent text-base font-medium rounded-md text-white bg-[#5062ffa9] hover:bg-[#3748DE] focus:ring-gray-600 flex items-center"
-                className="mt-2 lg:mt-3 px-8 py-3 inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-base font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                className="mt-2 lg:mt-3 p-3 flex items-center justify-center rounded-md border border-[#5061FF] bg-white text-base font-medium text-[#5061FF] shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
                 onClick={() => {
                   setCurrentJobId("");
                   setCurrentJob(null);
                   setInputUrl("");
                 }}
               >
-                <span>Create a New Dub</span>
+                {/* <div className="flex flex-row items-center"> */}
+                {/* <svg
+                    width="21"
+                    height="21"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="align-middle"
+                  >
+                    <path
+                      d="M19.375 11.375H12.625V4.625C12.625 4.27981 12.3452 4 12 4C11.6548 4 11.375 4.27981 11.375 4.625V11.375H4.625C4.27981 11.375 4 11.6548 4 12C4 12.3452 4.27981 12.625 4.625 12.625H11.375V19.375C11.375 19.7202 11.6548 20 12 20C12.3452 20 12.625 19.7202 12.625 19.375V12.625H19.375C19.7202 12.625 20 12.3452 20 12C20 11.6548 19.7202 11.375 19.375 11.375Z"
+                      fill="currentColor"
+                    />
+                  </svg> */}
+                <svg
+                  width="16"
+                  height="16"
+                  viewBox="0 0 16 16"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M15.375 7.375H8.625V0.625C8.625 0.279813 8.34519 0 8 0C7.65481 0 7.375 0.279813 7.375 0.625V7.375H0.625C0.279813 7.375 0 7.65481 0 8C0 8.34519 0.279813 8.625 0.625 8.625H7.375V15.375C7.375 15.7202 7.65481 16 8 16C8.34519 16 8.625 15.7202 8.625 15.375V8.625H15.375C15.7202 8.625 16 8.34519 16 8C16 7.65481 15.7202 7.375 15.375 7.375Z"
+                    fill="currentColor"
+                  />
+                </svg>
+
+                <span className="ml-2 mt-[1px]">Create a New Dub</span>
+                {/* </div> */}
               </button>
             )}
             {(currentJob === null || currentJob.status !== "completed") && (
@@ -359,7 +388,7 @@ const VideoTranslationComponent = () => {
               {/* Icon can be placed here */}
                   {/* </button> */}
                   {/* <div className="flex"> */}
-                  <span className="self-start mt-1 lg:mt-2 mb-2 text-sm">
+                  <span className="self-start mt-1 lg:mt-3 mb-2 text-sm">
                     Target Language
                   </span>
                   {/* <div className="self-start"> */}
