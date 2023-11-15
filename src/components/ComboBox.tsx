@@ -37,7 +37,7 @@ export default function Combobox({
           variant="outline"
           role="combobox"
           aria-expanded={open}
-          className="w-[240px] lg:w-[480px] xl:w-[640px] justify-between"
+          className="w-[360px] lg:w-[480px] xl:w-[640px] justify-between"
         >
           {value
             ? languageOptions.find((framework) => framework.value === value)
@@ -50,7 +50,7 @@ export default function Combobox({
           )}
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-[240px] lg:w-[480px] xl:w-[640px] p-0">
+      <PopoverContent className="w-[360px] lg:w-[480px] xl:w-[640px] p-0">
         <Command>
           <CommandInput placeholder="Search language..." />
           <CommandEmpty>No language found.</CommandEmpty>
