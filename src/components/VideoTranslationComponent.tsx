@@ -350,20 +350,6 @@ const VideoTranslationComponent = () => {
                   setInputUrl("");
                 }}
               >
-                {/* <div className="flex flex-row items-center"> */}
-                {/* <svg
-                    width="21"
-                    height="21"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="align-middle"
-                  >
-                    <path
-                      d="M19.375 11.375H12.625V4.625C12.625 4.27981 12.3452 4 12 4C11.6548 4 11.375 4.27981 11.375 4.625V11.375H4.625C4.27981 11.375 4 11.6548 4 12C4 12.3452 4.27981 12.625 4.625 12.625H11.375V19.375C11.375 19.7202 11.6548 20 12 20C12.3452 20 12.625 19.7202 12.625 19.375V12.625H19.375C19.7202 12.625 20 12.3452 20 12C20 11.6548 19.7202 11.375 19.375 11.375Z"
-                      fill="currentColor"
-                    />
-                  </svg> */}
                 <svg
                   width="16"
                   height="16"
